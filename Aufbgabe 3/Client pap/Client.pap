@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FRAME GUID="2FB25471-B62C-4EE6-BD43-F819C095ACF8" FORMAT="0000" APP_VERSION="2.2.0.8" CHECKSUM="F07EBE447EC49A01">
-  <PROJECT FORMAT="1.00" NAME="Client" AUTHOR="Filipe" CREATED="2014.10.24 17:16:07" MODIFIED="2014.11.04 18:00:21">
+<FRAME GUID="2FB25471-B62C-4EE6-BD43-F819C095ACF8" FORMAT="0000" APP_VERSION="2.2.0.8" CHECKSUM="2B96B398A0CC089D">
+  <PROJECT FORMAT="1.00" NAME="Client" AUTHOR="Filipe" CREATED="2014.10.24 17:16:07" MODIFIED="2014.11.04 22:14:16">
     <DIAGRAMS>
       <DIAGRAM FORMAT="1.00" ID="0" NAME="Thread: Fragenwechsel" CREATED="2014.10.24 17:16:11" MODIFIED="2014.11.04 17:41:55">
         <LAYOUT FORMAT="1.00" COLUMNS="3" ROWS="9">
@@ -359,8 +359,8 @@
           <CONNECTION FORMAT="1.00" ID="371" FROM="74" TO="369" TEXT="" />
         </CONNECTIONS>
       </DIAGRAM>
-      <DIAGRAM FORMAT="1.00" ID="2" NAME="Thread: GUI" CREATED="2014.10.24 18:21:20" MODIFIED="2014.11.04 17:41:55">
-        <LAYOUT FORMAT="1.00" COLUMNS="7" ROWS="18">
+      <DIAGRAM FORMAT="1.00" ID="2" NAME="Thread: GUI" CREATED="2014.10.24 18:21:20" MODIFIED="2014.11.04 22:05:50">
+        <LAYOUT FORMAT="1.00" COLUMNS="6" ROWS="18">
           <ENTRIES>
             <ENTRY COLUMN="0" ROW="2">
               <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="73">
@@ -387,124 +387,134 @@
                 <TEXT><![CDATA[Ende]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="0" ANCHOR="True">
+            <ENTRY COLUMN="1" ROW="3">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="238">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="8">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="239">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="0" ANCHOR="True">
               <FIGURE SUBTYPE="PapTitle" FORMAT="1.00" ID="0">
                 <TEXT><![CDATA[Thread: GUI]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="1">
+            <ENTRY COLUMN="2" ROW="1">
               <FIGURE SUBTYPE="PapStart" FORMAT="1.00" ID="1">
                 <TEXT><![CDATA[Start]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="2">
+            <ENTRY COLUMN="2" ROW="2">
               <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="8">
                 <TEXT><![CDATA[Beenden Button?]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="3">
+            <ENTRY COLUMN="2" ROW="3">
               <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="121">
                 <TEXT><![CDATA[Bin ich Spielleiter?]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="4">
+            <ENTRY COLUMN="2" ROW="4">
               <FIGURE SUBTYPE="PapInput" FORMAT="1.00" ID="155">
                 <TEXT><![CDATA[Eingabe von GUI]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="5">
+            <ENTRY COLUMN="2" ROW="5">
               <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="133">
                 <TEXT><![CDATA[Katalog wählen]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="6">
+            <ENTRY COLUMN="2" ROW="6">
               <FIGURE SUBTYPE="PapOutput" FORMAT="1.00" ID="212">
                 <TEXT><![CDATA[Katalog wurde geändert]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="7">
+            <ENTRY COLUMN="2" ROW="7">
               <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="157">
                 <TEXT><![CDATA[Spiel starten?]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="8">
+            <ENTRY COLUMN="2" ROW="8">
               <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="204">
                 <TEXT><![CDATA[]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="9">
+            <ENTRY COLUMN="2" ROW="9">
               <FIGURE SUBTYPE="PapInput" FORMAT="1.00" ID="230">
                 <TEXT><![CDATA[Eingabe in Gui]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="10">
+            <ENTRY COLUMN="2" ROW="10">
               <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="168">
                 <TEXT><![CDATA[Welche eingabe?]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="11">
+            <ENTRY COLUMN="2" ROW="11">
               <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="176">
                 <TEXT><![CDATA[Spielende]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="1" ROW="12">
+            <ENTRY COLUMN="2" ROW="12">
               <FIGURE SUBTYPE="PapInput" FORMAT="1.00" ID="207">
                 <TEXT><![CDATA[Eingabe von GUI]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="2" ROW="2">
+            <ENTRY COLUMN="3" ROW="2">
               <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="227">
                 <TEXT><![CDATA[]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="2" ROW="7">
+            <ENTRY COLUMN="3" ROW="7">
               <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="225">
                 <TEXT><![CDATA[]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="2" ROW="10">
+            <ENTRY COLUMN="3" ROW="10">
               <FIGURE SUBTYPE="PapInput" FORMAT="1.00" ID="178">
                 <TEXT><![CDATA[Eingabe von GUI]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="2" ROW="11">
+            <ENTRY COLUMN="3" ROW="11">
               <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="180">
                 <TEXT><![CDATA[Mutex sperren]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="2" ROW="12">
+            <ENTRY COLUMN="3" ROW="12">
               <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="181">
                 <TEXT><![CDATA[Antwortauswahl]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="2" ROW="13">
+            <ENTRY COLUMN="3" ROW="13">
               <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="182">
                 <TEXT><![CDATA[Mutex entsperren]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="2" ROW="14">
+            <ENTRY COLUMN="3" ROW="14">
               <FIGURE SUBTYPE="PapOutput" FORMAT="1.00" ID="232">
                 <TEXT><![CDATA[Antwortauswahl an Server senden]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="2" ROW="15">
+            <ENTRY COLUMN="3" ROW="15">
               <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="188">
                 <TEXT><![CDATA[]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="3" ROW="8">
+            <ENTRY COLUMN="4" ROW="8">
               <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="202">
                 <TEXT><![CDATA[]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="3" ROW="15">
+            <ENTRY COLUMN="4" ROW="15">
               <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="190">
                 <TEXT><![CDATA[]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="4" ROW="16">
-              <FIGURE SUBTYPE="PapComment" FORMAT="1.00" ID="237">
-                <TEXT><![CDATA[Spielende]]></TEXT>
+            <ENTRY COLUMN="5" ROW="2">
+              <FIGURE SUBTYPE="PapComment" FORMAT="1.00" ID="123">
+                <TEXT><![CDATA[Spielvorbereitung]]></TEXT>
               </FIGURE>
             </ENTRY>
             <ENTRY COLUMN="5" ROW="8">
@@ -512,9 +522,9 @@
                 <TEXT><![CDATA[Spielphase]]></TEXT>
               </FIGURE>
             </ENTRY>
-            <ENTRY COLUMN="6" ROW="2">
-              <FIGURE SUBTYPE="PapComment" FORMAT="1.00" ID="123">
-                <TEXT><![CDATA[Spielvorbereitung]]></TEXT>
+            <ENTRY COLUMN="5" ROW="16">
+              <FIGURE SUBTYPE="PapComment" FORMAT="1.00" ID="237">
+                <TEXT><![CDATA[Spielende]]></TEXT>
               </FIGURE>
             </ENTRY>
           </ENTRIES>
@@ -550,9 +560,12 @@
           <CONNECTION FORMAT="1.00" ID="171" FROM="170" TO="209" TEXT="" />
           <CONNECTION FORMAT="1.00" ID="211" FROM="207" TO="209" TEXT="" />
           <CONNECTION FORMAT="1.00" ID="231" FROM="230" TO="168" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="240" FROM="121" TO="238" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="241" FROM="238" TO="239" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="242" FROM="239" TO="204" TEXT="" />
         </CONNECTIONS>
       </DIAGRAM>
-      <DIAGRAM FORMAT="1.00" ID="3" NAME="Main (client)" CREATED="2014.11.04 17:45:23" MODIFIED="2014.11.04 17:45:23">
+      <DIAGRAM FORMAT="1.00" ID="3" NAME="Main (client)" CREATED="2014.11.04 17:45:23" MODIFIED="2014.11.04 22:14:16">
         <LAYOUT FORMAT="1.00" COLUMNS="3" ROWS="17">
           <ENTRIES>
             <ENTRY COLUMN="0" ROW="0" ANCHOR="True">
@@ -622,12 +635,12 @@
             </ENTRY>
             <ENTRY COLUMN="0" ROW="13">
               <FIGURE SUBTYPE="PapInput" FORMAT="1.00" ID="18">
-                <TEXT><![CDATA[Katalog kommt zurück]]></TEXT>
+                <TEXT><![CDATA[Katalog wird vom Loader geladen]]></TEXT>
               </FIGURE>
             </ENTRY>
             <ENTRY COLUMN="0" ROW="14">
               <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="20">
-                <TEXT><![CDATA[Sting aus ResponseMessage nicht "/0"?]]></TEXT>
+                <TEXT><![CDATA[String aus ResponseMessage nicht "/0"?]]></TEXT>
               </FIGURE>
             </ENTRY>
             <ENTRY COLUMN="0" ROW="15">
@@ -652,7 +665,7 @@
             </ENTRY>
             <ENTRY COLUMN="1" ROW="14">
               <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="30">
-                <TEXT><![CDATA[Katalog in GUI schreiben]]></TEXT>
+                <TEXT><![CDATA[Katalog wird auf der GUI dargestellt]]></TEXT>
               </FIGURE>
             </ENTRY>
             <ENTRY COLUMN="2" ROW="6">

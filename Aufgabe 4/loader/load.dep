@@ -1,0 +1,10 @@
+loader/load.o: loader/load.c common/util.h common/question.h \
+ common/server_loader_protocol.h loader/load.h loader/util.h \
+ loader/parser.h
+loader/load.c:
+common/util.h:
+common/question.h:
+common/server_loader_protocol.h:
+loader/load.h:
+loader/util.h:
+loader/parser.h:

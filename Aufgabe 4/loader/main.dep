@@ -1,0 +1,7 @@
+loader/main.o: loader/main.c common/util.h common/server_loader_protocol.h \
+ loader/browse.h loader/load.h
+loader/main.c:
+common/util.h:
+common/server_loader_protocol.h:
+loader/browse.h:
+loader/load.h:

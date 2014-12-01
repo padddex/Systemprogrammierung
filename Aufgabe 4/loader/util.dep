@@ -1,0 +1,4 @@
+loader/util.o: loader/util.c loader/util.h common/util.h
+loader/util.c:
+loader/util.h:
+common/util.h:

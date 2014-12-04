@@ -1,0 +1,11 @@
+server/user.o: server/user.c server/user.h common/rfc.h common/question.h \
+ server/main.h common/sockets.h common/rfc.h server/user.h common/util.h
+server/user.c:
+server/user.h:
+common/rfc.h:
+common/question.h:
+server/main.h:
+common/sockets.h:
+common/rfc.h:
+server/user.h:
+common/util.h:

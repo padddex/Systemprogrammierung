@@ -1,0 +1,8 @@
+server/login.o: server/login.c server/login.h server/clientthread.h common/rfc.h \
+ common/question.h server/score.h
+server/login.c:
+server/login.h:
+server/clientthread.h:
+common/rfc.h:
+common/question.h:
+server/score.h:

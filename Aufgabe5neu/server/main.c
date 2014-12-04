@@ -1,0 +1,467 @@
+/*
+ * Systemprogrammierung
+ * Multiplayer-Quiz
+ *
+ * Server
+ * 
+ * main.c: Hauptprogramm des Servers
+ */
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <semaphore.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <fcntl.h>
+#include <pthread.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <string.h>
+#include <signal.h>
+#include "login.h"
+#include "catalog.h"
+#include "score.h"
+#include "common/util.h"
+#include "main.h"
+#include "user.h"
+#include "common/rfc.h"
+#include "common/sockets.h"
+
+
+static int socket_desc;
+void start_network(unsigned short);
+void set_pid();
+int detect_para(unsigned short*,char*, char*);
+void sigfunc(int);
+int argc_cp;
+char **argv_cp;
+
+int stdinPipe[2];
+int stdoutPipe[2];
+unsigned short status;
+
+
+/*
+ * Hauptprogramm des Servers
+ */
+int main(int argc, char **argv)
+{
+	unsigned short port = 54321;
+	argc_cp = argc;
+	argv_cp = argv;
+	pid_t forkResult;
+	char pfad[51];
+	char catalog[51];
+
+	/*
+	 * Semaphore initialisieren
+	 */
+	sem_init(&uno_semaphore, 0, 0);
+
+
+	set_pid();
+	if(detect_para(&port, pfad, catalog) == -1)
+	{
+		exit(0);
+	}
+
+	/*
+	 *Verhalten des Servers bei Strg+C
+	 */
+	signal(SIGINT,sigfunc);
+
+
+	infoPrint("gewählter Port: %d", port);
+	infoPrint("gewählter Pfad: %s", pfad);
+	infoPrint("gewählter Katalog: %s", catalog);
+	/*
+	 *Den Programmnamen setzen
+	 */
+	setProgName(argv[0]);
+
+	infoPrint("Server Gruppe 6/n");
+	infoPrint("Info: Der Server kann mit STRG-C beendet werden.");
+	infoPrint("--------------------------------------------------------------------------------------------------------------\n");
+	
+	/*
+	 *Socket erstellen
+	 */
+	start_network(port);
+
+	/*
+	 *Pipe erstellen
+	 */
+	if(pipe(stdinPipe) == -1 || pipe(stdoutPipe) == -1)
+	{
+		perror("pipe");
+	}
+
+	/*
+	 *Kindprozess erstellen
+	 */
+	forkResult = fork();
+	if(forkResult < 0)
+	{
+		perror("fork");
+	}
+	/*
+	 *Im Kindprozess
+	 */
+	else if(forkResult == 0)
+	{	/*
+	 	 *Standardeingabekanal mit dem Pipekanal stdinPipe[0] verbinden
+	 	 */
+		if(dup2(stdinPipe[0], STDIN_FILENO) == -1)
+		{
+		  perror("dup2(stdinPipe[0], STDIN_FILENO)");
+		}
+
+		/*Standardausgabekanal mit dem Pipekanal stdinPipe[1] verbinden*/
+		if(dup2(stdoutPipe[1], STDOUT_FILENO) == -1)				{
+		  perror("dup2(stdoutPipe[1], STDOUT_FILENO)");
+		}
+
+		/* Schließen aller Pipe-Deskriptoren.
+		* Nach dem exec kennt der Kindprozess diese nicht mehr und spricht
+		* die Pipes selbst über stdin und stdout an.
+		*/
+		close(stdinPipe[0]); close(stdinPipe[1]);
+		close(stdoutPipe[0]); close(stdoutPipe[1]);
+
+		/*
+		 *Neues Programm läuft...
+		 */
+		execl("./loader", "loader", "-d", catalog, NULL);
+		/*
+		 * ...oder auch nicht, dann war's aber ein Fehler
+		 */
+		perror("exec");
+	}
+
+	close(stdinPipe[0]);
+	close(stdoutPipe[1]);
+
+	pthread_t login_thread_id;
+
+	/*
+	 *Login Thread starten
+	 */
+	if((pthread_create(&login_thread_id, 0, (void*)&login_loop, &socket_desc)) != 0)
+	{
+		perror("Thread_create steht in main.c");
+	}
+
+	pthread_t spielstand_thread_id;
+	infoPrint("NACH LOGIN!!!");
+
+	/*
+	 *Spielstand Thread starten
+	 */
+	if((pthread_create(&spielstand_thread_id, NULL, (void*)&spielstand_thread_main, NULL)) != 0)
+	{
+		perror("Thread_create steht in main.c");
+	}
+
+	/*
+	 * Warten auf das Ende des Spielstandthreads
+	 */
+	pthread_join(spielstand_thread_id, 0);
+	/*
+	 *Server beenden
+	 */
+	quitServer(NO_ERROR, 0);
+	return 0;
+}
+
+/*
+ * Funktion um Richtigkeit und vorhanden sein von Startparametern zu überprüfen
+ */
+int detect_para(unsigned short *port, char* pfad, char* catalog)
+{
+	int j;
+	char *_tmp_str;
+	/*
+	 * Durchlaufen der Parameterliste
+	 */
+	for(j = 1; j < argc_cp; j++)
+	{
+		/*
+		 * Überprüfen ob ein Parameterbefehl -p(Port) angegeben wurde
+		 */
+		if(strcmp(argv_cp[j-1], "-p") == 0)
+		{
+			_tmp_str = argv_cp[j];
+			/*
+			 * Wenn ja, überprüfen ob Stelle danach leer ist, oder nächste Stelle neuer Paramterbefehl ist
+			 */
+			if((strcmp(argv_cp[j-1], "-p") == 0 && argv_cp[j] != NULL) && (strcmp(argv_cp[j-1], "-p") == 0  && _tmp_str[0] != '-'))
+			{
+				/*
+				 * Wenn korrekt speichern des Ports zu Weiterverarbeitung aus Parameterliste
+				 */
+				*port = atoi(argv_cp[j]);
+				break;
+			}
+			else
+			{
+				/*
+				 * Ausgabe Fehlermeldung
+				 */
+				infoPrint("Ungueltigen Port angegeben!");
+				return -1;
+			}
+		}
+		else
+		{
+				/*
+				 * Wenn kein Paramterbefehl für Port angegeben wurde, verwenden eines als Standard angegebenen Ports
+				 */
+				*port = 54321;
+		}
+	}
+
+	/*
+	 * Durchlaufen der Parameterlist
+	 */
+	for(j = 1; j < argc_cp; j = j + 1)
+		{
+			/*
+			 * Überprüfen ob Alternativer Pfad zum loader angegeben wurde
+			 */
+			if(strcmp(argv_cp[j-1], "-l") == 0)
+			{
+				_tmp_str = argv_cp[j];
+				/*
+				 * Wenn ja, Überprüfen ob Eingabe danach leer, oder ein neuer Parameterbefehl ist
+				 */
+				if((argv_cp[j] != NULL) && (_tmp_str[0] != '-'))
+				{
+					/*
+					 * Wenn gültige Angabe, Überprüfen ob die Pfadangabe zu lang ist
+					 */
+					if(strlen(argv_cp[j]) > 50)
+					{
+						/*
+						 * Fehlermeldung
+						 */
+						infoPrint("Pfad zum Loader zu lange, max 50 Zeichen!");
+						return -1;
+					}
+					else
+					{
+						/*
+						 * Wenn alles korrekt, speicher des Pfades, zur weiterverwendung im Programm
+						 */
+						strncpy (pfad, argv_cp[j], sizeof(char[51]));
+						break;
+					}
+				}
+				else
+				{
+					/*
+					 * Wenn Falsche Eingabe, Fehlermeldung
+					 */
+					infoPrint("Falsche angabe von Pfad");
+					return -1;
+				}
+			}
+			else
+			{
+				/*
+				 * Wenn kein Alternativer Loader angegeben wurde, verwenden des Standard-Loaders
+				 */
+				strncpy (pfad , "./loader", sizeof(char[50]));
+			}
+		}
+	/*
+	 * Überprüfen ob nur ein Parameter angegben wurde(ein Parameter aufjedenfall,
+	 *  wegen Aufruf von Programm(./Client) Client == erster Paramter), wenn ja ist kein Katalogverzeichniss angegeben
+	 */
+	if (argc_cp <= 1)
+		{
+			/*
+			 * Fehlermeldung
+			 */
+			infoPrint("Keinen Katalogverzeichniss angegeben!");
+			return -1;
+		}
+
+		/*
+		 * Durchlaufen der Parameterliste
+		 */
+		for(j = 1; j < argc_cp; j++)
+		{
+			_tmp_str = argv_cp[j];
+			/*
+			 * Überprüfen ob Parameterbefehl -c(Katalogverzeichniss) angegeben wurde
+			 * und die Stelle danach nicht leer ist, oder die Stelle danach ein neuer Parameterbefehl ist
+			 */
+			if((strcmp(argv_cp[j-1], "-c") == 0 && argv_cp[j] != NULL) && (strcmp(argv_cp[j-1], "-c") == 0  && _tmp_str[0] != '-'))
+			{
+				/*
+				 * Wenn Angabe korrekt, überprüfen ob Pfad zum Katalog zu lang ist
+				 */
+				if(strlen(argv_cp[j]) > 50)
+				{
+					/*
+					 * Wenn zu lang, Ausgabe Fehlermeldung
+					 */
+					infoPrint("Pfad zum Katalog zu lange, max 50 Zeichen!");
+					return -1;
+				}
+				else
+				{
+					/*
+					 * Wenn alles korrekt, speichern des Pfades zum Katalogverzeichniss zu Weiterverwendung im Programm
+					 */
+					strncpy (catalog, argv_cp[j], sizeof(char[51]));
+					break;
+				}
+			}
+			else
+			{
+				if(j >= argc_cp - 1)
+				{
+					/*
+					 * Wenn Liste durchlaufen, aber kein Pfad zum Katalogverzeichniss angegeben wurde
+					 */
+					infoPrint("Kein Katalogverzeichniss angegeben!");
+					return -1;
+				}
+			}
+		}
+	return 0;
+}
+
+void set_pid()
+{
+	int pid_server;
+	struct flock lock;
+	char pid_file_string[32];
+	lock.l_type = F_WRLCK;
+	lock.l_whence = SEEK_SET;
+	lock.l_start = 0;
+	lock.l_len = 0;
+
+
+	pid_server = open("pid_server", O_WRONLY | O_CREAT, 0644);
+
+
+	if (fcntl(pid_server, F_SETLK, &lock) < 0)
+	{
+			perror("Cannot lock PID file!");
+			exit(0);
+	}
+	else
+	{
+		ftruncate(pid_server, 0);
+
+		snprintf(pid_file_string, sizeof(pid_file_string), "%d\n", (int)getpid());
+		if(write(pid_server, pid_file_string, strlen(pid_file_string)) < strlen(pid_file_string))
+		{
+			perror("Fehler! Kein Schreibzugriff beim Erstellen der PID file.");
+		}
+		else
+		{
+			fsync(pid_server);
+		}
+	}
+}
+/*
+ * Funktion zum Erstellen von Sockets
+ */
+void start_network(unsigned short port)
+{
+	/*
+	 * Socket vom Betriebssystem anfordern
+	 */
+	socket_desc = socket(AF_INET, SOCK_STREAM, 0);
+	struct sockaddr_in serv_verb_infos;
+	int one = 1;
+
+	if(socket_desc < 0)
+	{
+		perror("socket steht in main.c");
+	}
+	/*
+	 * Socketoptionen setzen SO_REUSEPORT:Lokale Adresse wieder verwenden
+	 */
+	if (setsockopt(socket_desc, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)) < 0)
+	{
+		perror("setsockopt steht in main.c");
+	}
+
+	memset(&serv_verb_infos, 0, sizeof(serv_verb_infos));
+	serv_verb_infos.sin_family = AF_INET;
+	serv_verb_infos.sin_port = htons(port);
+	serv_verb_infos.sin_addr.s_addr = INADDR_ANY;
+
+	/*
+	 *Socket mit dem Port verknüpfen
+	 */
+	if (bind(socket_desc, (struct sockaddr*)&serv_verb_infos, sizeof(serv_verb_infos)) < 0)
+	{
+		perror("bind steht in main.c");
+		close(socket_desc);
+	}
+
+	if (listen(socket_desc, 10) < 0)
+	{
+		perror("listen steht in main.c");
+		close(socket_desc);
+	}
+	
+}
+
+void sigfunc(int sig)
+{
+	 char c[2];
+
+	 if(sig != SIGINT)
+	 {
+		 return;
+	 }
+	 else
+	 {
+			infoPrint("Wollen sie das Programm beenden (J/N) : ");
+			read(STDIN_FILENO,c,sizeof(char));
+			if(c[0] != 'j' && c[0] != 'J')
+			{
+				infoPrint("Das Program wird fortgesetzt...\n");
+				return;
+			}
+
+		 	strncpy(errorMessage, "Der Server ist beendet!!!", sizeof(errorMessage));
+
+		 	quitServer(NO_ERROR, 0);
+	  }
+}
+/*
+ * Funktion zum Beenden des Servers
+ */
+void quitServer(int error, char message[MAX_ERRORMESSAGE])
+{
+	int i;
+	int socket, userId;
+
+	for (i = 0; i < MAX_PLAYER;  i++)
+	{
+		socket = getSocketDescr(i);
+		userId = getUserId(i);
+		if(error == ERROR && i != 0 && userId != 99)
+		{
+			send_socket(socket, ErrorWarning, message , error);
+
+			infoPrint("Schliesse SocketDescr.: %d", socket);
+			close(socket);
+		}
+	}
+	infoPrint("Beende den Server...");
+	remove("pid_server");
+	closeSHM();														/*Shared Memory schließen*/
+	infoPrint("Done!");
+	exit(0);
+}

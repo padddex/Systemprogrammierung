@@ -1,0 +1,3 @@
+client/fragewechsel.o: client/fragewechsel.c client/fragewechsel.h
+client/fragewechsel.c:
+client/fragewechsel.h:

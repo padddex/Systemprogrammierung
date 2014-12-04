@@ -1,0 +1,11 @@
+server/catalog.o: server/catalog.c common/server_loader_protocol.h \
+ common/question.h common/util.h server/catalog.h common/rfc.h \
+ server/user.h server/main.h
+server/catalog.c:
+common/server_loader_protocol.h:
+common/question.h:
+common/util.h:
+server/catalog.h:
+common/rfc.h:
+server/user.h:
+server/main.h:

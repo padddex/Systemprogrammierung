@@ -1,0 +1,4 @@
+client/main.o: client/main.c common/util.h client/gui/gui_interface.h
+client/main.c:
+common/util.h:
+client/gui/gui_interface.h:

@@ -1,0 +1,15 @@
+common/sockets.o: common/sockets.c common/sockets.h common/rfc.h \
+ common/question.h server/user.h common/rfc.h client/listener.h \
+ server/login.h server/score.h common/util.h \
+ common/../client/gui/gui_interface.h
+common/sockets.c:
+common/sockets.h:
+common/rfc.h:
+common/question.h:
+server/user.h:
+common/rfc.h:
+client/listener.h:
+server/login.h:
+server/score.h:
+common/util.h:
+common/../client/gui/gui_interface.h:

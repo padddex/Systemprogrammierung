@@ -1,0 +1,3 @@
+server/user.o: server/user.c server/user.h
+server/user.c:
+server/user.h:

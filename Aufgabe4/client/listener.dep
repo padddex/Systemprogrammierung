@@ -1,0 +1,5 @@
+client/listener.o: client/listener.c client/listener.h \
+ client/gui/gui_interface.h
+client/listener.c:
+client/listener.h:
+client/gui/gui_interface.h:

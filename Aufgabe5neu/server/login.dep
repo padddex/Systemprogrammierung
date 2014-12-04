@@ -1,0 +1,14 @@
+server/login.o: server/login.c server/login.h common/util.h common/sockets.h \
+ common/rfc.h common/question.h server/user.h common/rfc.h server/user.h \
+ server/main.h server/clientthread.h
+server/login.c:
+server/login.h:
+common/util.h:
+common/sockets.h:
+common/rfc.h:
+common/question.h:
+server/user.h:
+common/rfc.h:
+server/user.h:
+server/main.h:
+server/clientthread.h:

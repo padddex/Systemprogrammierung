@@ -1,9 +1,0 @@
-server/main.o: server/main.c common/util.h server/catalog.h server/login.h \
- server/clientthread.h common/rfc.h common/question.h
-server/main.c:
-common/util.h:
-server/catalog.h:
-server/login.h:
-server/clientthread.h:
-common/rfc.h:
-common/question.h:

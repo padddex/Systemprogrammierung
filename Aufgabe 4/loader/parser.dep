@@ -1,4 +1,0 @@
-loader/parser.o: loader/parser.c loader/parser.h common/question.h
-loader/parser.c:
-loader/parser.h:
-common/question.h:

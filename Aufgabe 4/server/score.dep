@@ -1,8 +1,0 @@
-server/score.o: server/score.c server/score.h server/login.h \
- server/clientthread.h common/rfc.h common/question.h
-server/score.c:
-server/score.h:
-server/login.h:
-server/clientthread.h:
-common/rfc.h:
-common/question.h:
